@@ -1,6 +1,6 @@
 const database = firebase.database();
-let email = null;
 const msgRef = database.ref("/messages");
+let email = null;
 
 function sendMessage(){
     let messageInput = document.getElementById("msg-input");
@@ -21,6 +21,7 @@ function load(){
             name = user.displayName;
             email = user.email;
             msgRef.on('child_added', updateMessages);
+            console.log(user);
             userName.innerHTML = "Welcome, " + name + "!";
         } else {
             window.location.replace("login.html");
