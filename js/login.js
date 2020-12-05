@@ -1,3 +1,4 @@
+
 function googleSignin() {
     let provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
@@ -10,3 +11,4 @@ function googleSignin() {
             });
         });
 }
+

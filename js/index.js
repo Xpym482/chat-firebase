@@ -1,4 +1,3 @@
-const database = firebase.database();
 const msgRef = database.ref("/messages");
 let email = null;
 
@@ -16,19 +15,49 @@ function sendMessage(){
     messageInput.value = "";
 }
 
+async function runThrough(massiiv){
+    console.log(massiiv.length)
+    
+    for(let i = 0; i < massiiv.length; i++){
+        console.log(massiiv[i])
+        if(massiiv[i].email == email){
+            return true;
+        }
+    }
+    return false;
+}
+
+
 function load(){
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.auth().onAuthStateChanged(async function(user) {
         if (user) {
             const userNameContainer = document.getElementById("your-name");
+            
             const userName = document.getElementById("user-name");
+
             name = user.displayName;
             email = user.email;
             photoUrl = user.photoURL;
             photo = document.getElementById("profile-image");
             photo.src=photoUrl;
+
+            const usrRef = database.ref("/users");
+
+            const usr = {
+                email,
+                name,
+                photoUrl
+            };
+            let users = [];
+            await usrRef.on('value', function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    users.push(childSnapshot.val());
+                });
+            });
+            if (!runThrough(users)){usrRef.push(usr);}
             msgRef.on('child_added', updateMessages);
+            //console.log(users);
             userNameContainer.innerHTML = name;
-            //userName.innerHTML = "Welcome, " + name + "!";
 
         } else {
             window.location.replace("login.html");
@@ -51,10 +80,6 @@ function updateMessages(data) {
     const msg = `<li class="message" id="${email === userEmail ? "messages-sent": "messages-received"}">
     <i class = "name">${name}</i><br><i>${text}</i>
     </li>`;
-    if(email != userEmail){
-        console.log(userEmail);
-    }
-
     messagesContainer.innerHTML += msg;
     document.getElementById("conversation").scrollTop = document.getElementById("conversation").scrollHeight;
 }
