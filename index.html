@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-database.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyD_haTEYcJPhtGFdPxpqrsJLqw06zwIo2I",
+            authDomain: "chatjs-827cc.firebaseapp.com",
+            databaseURL: "https://chatjs-827cc-default-rtdb.firebaseio.com",
+            projectId: "chatjs-827cc",
+            storageBucket: "chatjs-827cc.appspot.com",
+            messagingSenderId: "875691551341",
+            appId: "1:875691551341:web:61113513c9f71804a66d64"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        // Get a reference to the database service
+        var database = firebase.database();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="messenger">
+            <div class="allMessages">
+                <ul>
+                    <li>
+                        <a href="/">
+                            <div class="conversation-container">
+                                <div class="conversation-item">
+                                    <div class="conversation-logo"><img src="long.jpg" alt=""/></div>
+                                    <div class="conversation-text">
+                                        <h5>
+                                            Friend name
+                                        </h5>
+                                        <p class="conversation-last">
+                                            message...
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="conversation">
+                <div class="messages messages-received">
+                    <div class="message">
+                        Hello!
+                    </div>
+                </div>
+                <div class="messages messages-sent">
+                    <div class="message">
+                        Hello!
+                    </div>
+                </div>
+            </div>
+            <div class="textBox">
+                <input type="text" class="message-input" placeholder="Type your message"/>
+                <input type="button" class="message-button" value="Send"/>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
