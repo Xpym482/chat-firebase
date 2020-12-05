@@ -3,14 +3,15 @@ let email = null;
 const msgRef = database.ref("/messages");
 
 function sendMessage(){
-    const messageInput = document.getElementById("msg-input").value;
+    let messageInput = document.getElementById("msg-input");
     const msg = {
         email,
         name,
-        text: messageInput
+        text: messageInput.value
     };
 
     msgRef.push(msg);
+    messageInput.value = "";
 }
 
 function load(){
@@ -37,22 +38,14 @@ function googleSignout() {
 }
 
 function updateMessages(data) {
-    const sentMessagesContainer = document.getElementById("messages-sent");
-    const receivedMessagesContainer = document.getElementById("messages-received");
+    const messagesContainer = document.getElementById("messages");
     const {email: userEmail , name, text} = data.val();
+    const msg = `<li class="message" id="${email === userEmail ? "messages-sent": "messages-received"}">
+    <i class = "name">${name}: </i>${text}
+    </li>`;
 
-    const output = text;
-    let msg = '';
-
-    if (email === userEmail) {
-        msg = `<li class="message" id="sentMessage"><i class = "name">${name}: </i>${output}</li>`
-        sentMessagesContainer.innerHTML += msg;
-    } else {
-        msg = `<li class="message" id="receivedMessage"><i class = "name">${name}: </i>${output}</li>`
-        receivedMessagesContainer.innerHTML += msg;
-    }
-  //   document.getElementById("chat-window").scrollTop = document.getElementById("chat-window").scrollHeight;
-  //   //auto scroll to bottom
+    messagesContainer.innerHTML += msg;
+    document.getElementById("conversation").scrollTop = document.getElementById("conversation").scrollHeight;
 }
 
 document.addEventListener('DOMContentLoaded', load);

@@ -86,12 +86,12 @@ body, html {
     padding-bottom: 0;
 }
 
-.messages-received .message{
+li#messages-received{
     float: left;
     background-color: #ddd;
 }
 
-.messages-sent .message{
+li#messages-sent{
     float: right;
     background-color: rgb(0, 132, 255);
     color: white;
