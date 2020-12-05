@@ -15,27 +15,22 @@
     <div class="container">
         <div class="userInfo">
             <div id="user-name"></div>
-            <button class="logout-button" onclick="googleSignout()">Logout</button>
         </div>
         <div class="messenger">
             <div class="allMessages">
                 <ul>
                     <li>
-                        <a href="/">
                             <div class="conversation-container">
                                 <div class="conversation-item">
-                                    <div class="conversation-logo"><img src="assets/long.jpg" alt=""/></div>
+                                    <div class="conversation-logo"><img id="profile-image" src="" alt=""/></div>
                                     <div class="conversation-text">
-                                        <h5>
-                                            Friend name
-                                        </h5>
+                                        <div id="your-name"></div>
                                         <p class="conversation-last">
-                                            message...
+                                            <button class="logout-button" onclick="googleSignout()">Logout</button>
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                        </a>
                     </li>
                 </ul>
             </div>

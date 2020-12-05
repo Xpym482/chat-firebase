@@ -61,6 +61,7 @@ body, html {
 }
 
 .allMessages ul li .conversation-text{
+    padding-left: 4px;
     float: left;
 }
 
@@ -75,8 +76,9 @@ body, html {
 }
 
 .allMessages ul li .conversation-logo img{
+    border-radius: 100%;
     width: 50px;
-    height: 40px;
+    height: 50px;
 }
 
 .conversation{
@@ -157,8 +159,14 @@ li#messages-sent{
 
 .logout-button {
     padding: 5px;
+    width: 70px;
 }
 
 ul {
     list-style-type: none;
+}
+.name{
+    font-size: 70%;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
 }
