@@ -1,6 +1,7 @@
 const msgRef = database.ref("/messages");
 let email = null;
 let receiverEmail = null;
+let messages = [];
 
 function sendMessage(){
     let messageInput = document.getElementById("msg-input");
@@ -14,6 +15,9 @@ function sendMessage(){
     };
 
     msgRef.push(msg);
+    const messagesContainer = document.getElementById("messages");
+    messagesContainer.innerHTML = "";
+    updateMessages(messages);
     messageInput.value = "";
 }
 
@@ -58,9 +62,13 @@ function load(){
 
             if (!runThrough(users)) usrRef.push(usr);
 
-            Object.values(users).forEach((element) => {
+            await msgRef.on('child_added', (snapshot) => {
+                messages.push(snapshot.val());
+            });
+
+            Object.values(users).forEach((element, index) => {
                 if (element.email === email) return;
-                addUserToChat(chats, element);
+                addUserToChat(chats, element, index);
             })
             userNameContainer.innerHTML = name;
 
@@ -81,17 +89,23 @@ function googleSignout() {
 
 function updateMessages(data) {
     const messagesContainer = document.getElementById("messages");
-    const {name, receiver, sender, text} = data.val();
-    if ((sender === email && receiver === receiverEmail) || (sender === receiverEmail && receiver === email)) {
-        const msg = `<li class="message" id="${email === sender ? "messages-sent": "messages-received"}">
-    <i class = "name">${name}</i><br><i>${text}</i>
-    </li>`;
-        messagesContainer.innerHTML += msg;
+    data.forEach((element) => {
+        const name = element.name;
+        const receiver = element.receiver;
+        const sender = element.sender;
+        const text = element.text;
+        if ((sender === email && receiver === receiverEmail) || (sender === receiverEmail && receiver === email)) {
+            const msg = `<li class="message" id="${email === sender ? "messages-sent": "messages-received"}">
+            <i class = "name">${name}</i><br><i>${text}</i>
+            </li>`;
+            messagesContainer.innerHTML += msg;
+        }
         document.getElementById("conversation").scrollTop = document.getElementById("conversation").scrollHeight;
-    }
+    })
+
 }
 
-function addUserToChat(chatsHTML, user) {
+function addUserToChat(chatsHTML, user, userId) {
     const divConvCont = document.createElement("div");
     divConvCont.className = "conversation-container";
 
@@ -121,7 +135,7 @@ function addUserToChat(chatsHTML, user) {
         const messagesContainer = document.getElementById("messages");
         messagesContainer.innerHTML = "";
         receiverEmail = user.email;
-        msgRef.on('child_added', updateMessages);
+        updateMessages(messages);
     }
     const textNickname = document.createTextNode(user.name);
 
