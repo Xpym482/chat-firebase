@@ -82,11 +82,13 @@ function googleSignout() {
 function updateMessages(data) {
     const messagesContainer = document.getElementById("messages");
     const {name, receiver, sender, text} = data.val();
-    const msg = `<li class="message" id="${email === sender ? "messages-sent": "messages-received"}">
+    if ((sender === email && receiver === receiverEmail) || (sender === receiverEmail && receiver === email)) {
+        const msg = `<li class="message" id="${email === sender ? "messages-sent": "messages-received"}">
     <i class = "name">${name}</i><br><i>${text}</i>
     </li>`;
-    messagesContainer.innerHTML += msg;
-    document.getElementById("conversation").scrollTop = document.getElementById("conversation").scrollHeight;
+        messagesContainer.innerHTML += msg;
+        document.getElementById("conversation").scrollTop = document.getElementById("conversation").scrollHeight;
+    }
 }
 
 function addUserToChat(chatsHTML, user) {
