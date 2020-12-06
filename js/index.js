@@ -15,12 +15,12 @@ function sendMessage(){
     messageInput.value = "";
 }
 
-async function runThrough(massiiv){
-    console.log(massiiv.length)
-    
-    for(let i = 0; i < massiiv.length; i++){
-        console.log(massiiv[i])
-        if(massiiv[i].email == email){
+function runThrough(arr) {
+    if (!arr) return false;
+
+    const data = Object.values(arr);
+    for(let i = 0; i < data.length; i++){
+        if(data[i].email === email){
             return true;
         }
     }
@@ -39,7 +39,7 @@ function load(){
             email = user.email;
             photoUrl = user.photoURL;
             photo = document.getElementById("profile-image");
-            photo.src=photoUrl;
+            photo.src = photoUrl;
 
             const usrRef = database.ref("/users");
 
@@ -48,15 +48,14 @@ function load(){
                 name,
                 photoUrl
             };
-            let users = [];
-            await usrRef.on('value', function(snapshot) {
-                snapshot.forEach(function(childSnapshot) {
-                    users.push(childSnapshot.val());
-                });
-            });
-            if (!runThrough(users)){usrRef.push(usr);}
+            let users = null;
+
+            await usrRef.once('value').then((snapshot) => {
+                users = snapshot.val()
+            })
+
+            if (!runThrough(users)) usrRef.push(usr);
             msgRef.on('child_added', updateMessages);
-            //console.log(users);
             userNameContainer.innerHTML = name;
 
         } else {
