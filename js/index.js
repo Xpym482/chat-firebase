@@ -1,12 +1,14 @@
 const msgRef = database.ref("/messages");
 let email = null;
+let receiverEmail = null;
 
 function sendMessage(){
     let messageInput = document.getElementById("msg-input");
     let text = messageInput.value;
     if(!text.trim()) return alert('Please enter message.');
     const msg = {
-        email,
+        sender: email,
+        receiver: receiverEmail,
         name,
         text
     };
@@ -29,11 +31,11 @@ function runThrough(arr) {
 
 
 function load(){
+    let chats = document.getElementById("all-conversations");
+
     firebase.auth().onAuthStateChanged(async function(user) {
         if (user) {
             const userNameContainer = document.getElementById("your-name");
-            
-            const userName = document.getElementById("user-name");
 
             name = user.displayName;
             email = user.email;
@@ -56,8 +58,10 @@ function load(){
 
             if (!runThrough(users)) usrRef.push(usr);
 
-
-            msgRef.on('child_added', updateMessages);
+            Object.values(users).forEach((element) => {
+                if (element.email === email) return;
+                addUserToChat(chats, element);
+            })
             userNameContainer.innerHTML = name;
 
         } else {
@@ -77,12 +81,63 @@ function googleSignout() {
 
 function updateMessages(data) {
     const messagesContainer = document.getElementById("messages");
-    const {email: userEmail , name, text} = data.val();
-    const msg = `<li class="message" id="${email === userEmail ? "messages-sent": "messages-received"}">
+    const {name, receiver, sender, text} = data.val();
+    const msg = `<li class="message" id="${email === sender ? "messages-sent": "messages-received"}">
     <i class = "name">${name}</i><br><i>${text}</i>
     </li>`;
     messagesContainer.innerHTML += msg;
     document.getElementById("conversation").scrollTop = document.getElementById("conversation").scrollHeight;
+}
+
+function addUserToChat(chatsHTML, user) {
+    const divConvCont = document.createElement("div");
+    divConvCont.className = "conversation-container";
+
+    const divConvItem = document.createElement("div");
+    divConvItem.className = "conversation-item";
+
+    const divConvLogo = document.createElement("div");
+    divConvLogo.className = "conversation-logo";
+
+    const divConvText = document.createElement("div");
+    divConvText.className = "conversation-text";
+
+    const profileImg = document.createElement("img");
+    profileImg.className = "profile-image";
+    profileImg.src = user.photoUrl;
+
+    const divYourName = document.createElement("div");
+    divConvText.className = "your-name";
+
+    const divConvLast = document.createElement("div");
+    divConvLast.className = "conversation-last";
+
+    const openChatButton = document.createElement("button");
+    openChatButton.className = "button";
+    openChatButton.innerHTML = "Message";
+    openChatButton.onclick = function () {
+        const messagesContainer = document.getElementById("messages");
+        messagesContainer.innerHTML = "";
+        receiverEmail = user.email;
+        msgRef.on('child_added', updateMessages);
+    }
+    const textNickname = document.createTextNode(user.name);
+
+    divConvLast.appendChild(openChatButton);
+
+    divYourName.appendChild(textNickname);
+    divConvText.appendChild(divYourName);
+    divConvText.appendChild(divConvLast);
+    divConvLogo.appendChild(profileImg);
+
+    divConvItem.appendChild(divConvLogo);
+    divConvItem.appendChild(divConvText);
+
+    divConvCont.appendChild(divConvItem);
+
+    const li = document.createElement("li");
+    li.appendChild(divConvCont);
+    chatsHTML.appendChild(li);
 }
 
 document.addEventListener('DOMContentLoaded', load);
