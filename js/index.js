@@ -55,6 +55,8 @@ function load(){
             })
 
             if (!runThrough(users)) usrRef.push(usr);
+
+
             msgRef.on('child_added', updateMessages);
             userNameContainer.innerHTML = name;
 
