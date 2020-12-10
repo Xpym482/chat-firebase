@@ -9,7 +9,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-database.js"></script>
     <link rel="stylesheet" href="assets/main.css">
     <script src="../js/config.js"></script>
-    <script src="../js/index.js"></script>
     <script src="../js/login.js"></script>
 </head>
 <body>
@@ -40,7 +39,9 @@
                 </ul>
             </div>
             <div id="conversation" class="conversation">
-                <ul id="messages" class="messages">
+                <ul id="messages-single" class="messages" style="display: none">
+                </ul>
+                <ul id="messages-group" class="messages" style="display: none">
                 </ul>
             </div>
             <div class="textBox">
@@ -49,5 +50,6 @@
             </div>
         </div>
     </div>
+    <script src="../js/index.js"></script>
 </body>
 </html>

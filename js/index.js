@@ -2,6 +2,8 @@ const msgRef = database.ref("/messages");
 let email = null;
 let receiverEmail = null;
 let messages = [];
+const messagesContainerGroup = document.getElementById("messages-group");
+const messagesContainer = document.getElementById("messages-single");
 
 function sendMessage(){
     let messageInput = document.getElementById("msg-input");
@@ -15,10 +17,8 @@ function sendMessage(){
     };
 
     msgRef.push(msg);
-    const messagesContainer = document.getElementById("messages");
     messagesContainer.innerHTML = "";
-    //if(receiverEmail !== "empty"){updateMessages(messages)};
-    //if(receiverEmail === "empty"){updateGroupMessages(messages)};
+    messagesContainerGroup.innerHTML = "";
     updateMessages(messages);
     messageInput.value = "";
 }
@@ -83,7 +83,6 @@ function load(){
 
 
 function updateMessages(data) {
-    const messagesContainer = document.getElementById("messages");
     data.forEach((element) => {
         const name = element.name;
         const receiver = element.receiver;
@@ -98,7 +97,7 @@ function updateMessages(data) {
             const msg = `<li class="message" id="${email === sender ? "messages-sent": "messages-received"}">
             <i class = "name">${name}</i><br><i>${text}</i>
             </li>`;
-            messagesContainer.innerHTML += msg;
+            messagesContainerGroup.innerHTML += msg;
         }
         document.getElementById("conversation").scrollTop = document.getElementById("conversation").scrollHeight;
     })
@@ -132,8 +131,10 @@ function addUserToChat(chatsHTML, user, userId) {
     openChatButton.className = "button";
     openChatButton.innerHTML = "Message";
     openChatButton.onclick = function () {
-        const messagesContainer = document.getElementById("messages");
         messagesContainer.innerHTML = "";
+        messagesContainerGroup.style.display = "none";
+        messagesContainerGroup.innerHTML = "";
+        messagesContainer.style.display = "block";
         receiverEmail = user.email;
         updateMessages(messages);
     }
@@ -157,28 +158,12 @@ function addUserToChat(chatsHTML, user, userId) {
 }
 
 function groupChat() {
-    const messagesContainer = document.getElementById("messages");
     messagesContainer.innerHTML = "";
+    messagesContainer.style.display = "none";
     receiverEmail = "empty";
+    messagesContainerGroup.style.display = "block";
+    messagesContainerGroup.innerHTML = "";
     updateMessages(messages);
-}
-
-function updateGroupMessages(data) {
-    const messagesContainer = document.getElementById("messages");
-    data.forEach((element) => {
-        const name = element.name;
-        const receiver = element.receiver;
-        const sender = element.sender;
-        const text = element.text;
-        if(receiver === "empty"){
-            const msg = `<li class="message" id="${email === sender ? "messages-sent": "messages-received"}">
-            <i class = "name">${name}</i><br><i>${text}</i>
-            </li>`;
-            messagesContainer.innerHTML += msg;
-        }
-        document.getElementById("conversation").scrollTop = document.getElementById("conversation").scrollHeight;
-    })
-
 }
 
 document.addEventListener('DOMContentLoaded', load);
