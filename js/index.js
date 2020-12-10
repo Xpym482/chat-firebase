@@ -17,6 +17,8 @@ function sendMessage(){
     msgRef.push(msg);
     const messagesContainer = document.getElementById("messages");
     messagesContainer.innerHTML = "";
+    //if(receiverEmail !== "empty"){updateMessages(messages)};
+    //if(receiverEmail === "empty"){updateGroupMessages(messages)};
     updateMessages(messages);
     messageInput.value = "";
 }
@@ -78,14 +80,7 @@ function load(){
     });
 }
 
-function googleSignout() {
-    firebase.auth().signOut()
-        .then(function() {
-            window.location.replace("login.html");
-        }, function(error) {
-            console.log(error);
-        });
-}
+
 
 function updateMessages(data) {
     const messagesContainer = document.getElementById("messages");
@@ -94,7 +89,12 @@ function updateMessages(data) {
         const receiver = element.receiver;
         const sender = element.sender;
         const text = element.text;
-        if ((sender === email && receiver === receiverEmail) || (sender === receiverEmail && receiver === email)) {
+        if ((sender === email && receiver === receiverEmail && receiver !== "empty") || (sender === receiverEmail && receiver === email && receiver !== "empty")) {
+            const msg = `<li class="message" id="${email === sender ? "messages-sent": "messages-received"}">
+            <i class = "name">${name}</i><br><i>${text}</i>
+            </li>`;
+            messagesContainer.innerHTML += msg;
+        } else if(receiver === "empty"){
             const msg = `<li class="message" id="${email === sender ? "messages-sent": "messages-received"}">
             <i class = "name">${name}</i><br><i>${text}</i>
             </li>`;
@@ -154,6 +154,31 @@ function addUserToChat(chatsHTML, user, userId) {
     const li = document.createElement("li");
     li.appendChild(divConvCont);
     chatsHTML.appendChild(li);
+}
+
+function groupChat() {
+    const messagesContainer = document.getElementById("messages");
+    messagesContainer.innerHTML = "";
+    receiverEmail = "empty";
+    updateMessages(messages);
+}
+
+function updateGroupMessages(data) {
+    const messagesContainer = document.getElementById("messages");
+    data.forEach((element) => {
+        const name = element.name;
+        const receiver = element.receiver;
+        const sender = element.sender;
+        const text = element.text;
+        if(receiver === "empty"){
+            const msg = `<li class="message" id="${email === sender ? "messages-sent": "messages-received"}">
+            <i class = "name">${name}</i><br><i>${text}</i>
+            </li>`;
+            messagesContainer.innerHTML += msg;
+        }
+        document.getElementById("conversation").scrollTop = document.getElementById("conversation").scrollHeight;
+    })
+
 }
 
 document.addEventListener('DOMContentLoaded', load);

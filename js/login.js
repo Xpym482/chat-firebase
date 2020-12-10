@@ -12,3 +12,11 @@ function googleSignin() {
         });
 }
 
+function googleSignout() {
+    firebase.auth().signOut()
+        .then(function() {
+            window.location.replace("login.html");
+        }, function(error) {
+            console.log(error);
+        });
+}

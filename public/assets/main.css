@@ -34,6 +34,7 @@ body, html {
     height: 100%;
     width: 30%;
     box-shadow: 0 0 3px 0px black;
+    overflow: auto;
 }
 
 .profile ul{
@@ -159,8 +160,10 @@ li#messages-sent{
 }
 
 .button {
-    padding: 5px;
+    
     width: 70px;
+    margin-left: 10px;
+   
 }
 
 ul {
@@ -170,4 +173,5 @@ ul {
     font-size: 70%;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
+    
 }
