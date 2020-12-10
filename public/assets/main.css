@@ -173,5 +173,8 @@ ul {
     font-size: 70%;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
-    
+}
+
+.your-name {
+    font-size: 14px;
 }
